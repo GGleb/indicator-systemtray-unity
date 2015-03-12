@@ -1,0 +1,7 @@
+Format: http://www.debian.org/doc/packaging-manuals/copyright-format/1.0/
+Upstream-Name: indicator-systemtray-unity
+Source: https://launchpad.net/~fixnix/+archive/ubuntu/indicator-systemtray-unity
+
+Files: *
+           2015 Gleb Golovachev <golovachev.gleb@gmail.com>
+License: this software is in the public domain

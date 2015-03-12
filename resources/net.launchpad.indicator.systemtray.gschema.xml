@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schemalist gettext-domain="indicator-systemtray-unity">
+  <schema path="/net/launchpad/indicator/systemtray/" id="net.launchpad.indicator.systemtray">
+    <key type="b" name="disable-indicator">
+      <default>false</default>
+      <summary>Disable the indicator</summary>
+      <description>If TRUE, the indicator is disabled. Require re-login.</description>
+    </key>
+    <key type="b" name="started-the-first-time">
+      <default>true</default>
+      <summary>Indicator is started the first time</summary>
+      <description>If the Indicator is started the first time, then the value is TRUE.</description>
+    </key>
+    <key type="b" name="tray-is-static">
+      <default>false</default>
+      <summary>The tray is displayed in the "show always"</summary>
+      <description>If you want to display the Tray in the "show always", then the value is TRUE.</description>
+    </key>
+    <key type="i" name="static-x">
+      <default>0</default>
+      <summary>Position X</summary>
+      <description>Position X when in mode "show always".</description>
+    </key>
+    <key type="i" name="static-y">
+      <default>0</default>
+      <summary>Position Y</summary>
+      <description>Position Y when in mode "show always".</description>
+    </key>
+  </schema>
+</schemalist>

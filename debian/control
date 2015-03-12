@@ -1,0 +1,17 @@
+Source: indicator-systemtray-unity
+Section: gnome
+Priority: extra
+Maintainer: Gleb Golovachev <golovachev.gleb@gmail.com>
+Build-Depends: debhelper (>= 7),
+	libgtk-3-dev,
+	libindicator3-dev,
+	libunity-misc-dev
+Standards-Version: 3.9.5
+Homepage: https://launchpad.net/~fixnix/+archive/ubuntu/indicator-systemtray-unity
+
+Package: indicator-systemtray-unity
+Architecture: any
+Depends: ${misc:Depends},
+	${shlibs:Depends}
+Description: System tray indicator for Unity
+ Indicator Systemtray Unity is an indicator for the Unity panel which shows the system tray.

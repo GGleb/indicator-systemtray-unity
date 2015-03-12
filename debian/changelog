@@ -1,0 +1,5 @@
+indicator-systemtray-unity (0.1-trusty0) trusty; urgency=medium
+
+  * Initial release
+
+ -- Gleb Golovachev <golovachev.gleb@gmail.com>  Tue, 10 Mar 2015 10:10:10 +0500
