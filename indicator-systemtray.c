@@ -171,22 +171,28 @@ static void indicator_systemtray_init(IndicatorSystemtray *self) {
     self->priv->hide_tray_is_active = FALSE;
     self->priv->hide_menu_is_active = FALSE;
     self->priv->menu = GTK_MENU( gtk_menu_new() );
-    self->priv->window = gtk_window_new( GTK_WINDOW_POPUP );
-    gtk_window_resize( GTK_WINDOW (self->priv->window), 24, 24 );
+    self->priv->window = gtk_window_new( GTK_WINDOW_TOPLEVEL );
+    gtk_window_set_type_hint( GTK_WINDOW (self->priv->window), GDK_WINDOW_TYPE_HINT_DOCK );
+    gtk_window_set_has_resize_grip( GTK_WINDOW (self->priv->window), FALSE );
+    gtk_window_set_keep_above( GTK_WINDOW (self->priv->window), TRUE );
+    gtk_window_set_skip_pager_hint( GTK_WINDOW (self->priv->window), TRUE );
+    gtk_window_set_skip_taskbar_hint( GTK_WINDOW (self->priv->window), TRUE );
+    gtk_window_set_gravity(GTK_WINDOW(self->priv->window), GDK_GRAVITY_NORTH_EAST);
     gtk_widget_set_name( self->priv->window, "UnityPanelApplet" );
-    gtk_widget_set_visual( self->priv->window, gdk_screen_get_rgba_visual (gdk_screen_get_default ()) );
+    gtk_widget_set_visual( self->priv->window, gdk_screen_get_rgba_visual(gdk_screen_get_default()) );
     gtk_widget_realize( self->priv->window );
     gtk_widget_set_app_paintable( self->priv->window, TRUE );
     gtk_window_set_title( GTK_WINDOW (self->priv->window), "System Tray" );
-    g_signal_connect (self->priv->window, "draw", G_CALLBACK (on_window_expose), self);
-    self->priv->tray = na_tray_new_for_screen( gdk_screen_get_default (), GTK_ORIENTATION_HORIZONTAL,
+    g_signal_connect( self->priv->window, "draw", G_CALLBACK(on_window_expose), self );
+    self->priv->tray = na_tray_new_for_screen( gdk_screen_get_default(), GTK_ORIENTATION_HORIZONTAL,
 							 (NaTrayFilterCallback)filter_tray_cb, self );
-    g_signal_connect( na_tray_get_manager(self->priv->tray), "tray_icon_removed", G_CALLBACK (on_tray_icon_removed), self );
+    g_signal_connect( na_tray_get_manager(self->priv->tray), "tray_icon_removed", G_CALLBACK(on_tray_icon_removed), self );
     gtk_container_add( GTK_CONTAINER(self->priv->window), GTK_WIDGET(self->priv->tray) );
     gtk_widget_show( GTK_WIDGET(self->priv->tray) );
     gtk_widget_show_all( self->priv->window );
     gtk_widget_hide( self->priv->window );
     g_signal_connect( self->priv->menu, "notify::visible", G_CALLBACK(menu_visible_notify_cb), self );
+    gtk_window_resize( GTK_WINDOW(self->priv->window), 1, 24 );
   }
 }
 
@@ -290,19 +296,19 @@ static void setting_changed_cb(GSettings *settings, gchar *key, gpointer user_da
     self->priv->tray_is_static = g_settings_get_boolean(self->priv->settings, SYSTEMTRAY_KEY_TRAY_IS_STATIC);
     if (self->priv->tray_is_static) {
       gtk_widget_show( self->priv->window );
-      gtk_window_move( GTK_WINDOW(self->priv->window), self->priv->static_x - width_of_tray(self), self->priv->static_y );
+      gtk_window_move( GTK_WINDOW(self->priv->window), self->priv->static_x, self->priv->static_y );
     }
     else gtk_widget_hide( self->priv->window );
   }
   else if (g_strcmp0(key, SYSTEMTRAY_KEY_STATIC_X) == 0) {
     self->priv->static_x = g_settings_get_int(self->priv->settings, SYSTEMTRAY_KEY_STATIC_X);
     if (self->priv->tray_is_static)
-      gtk_window_move( GTK_WINDOW(self->priv->window), self->priv->static_x - width_of_tray(self), self->priv->static_y );
+      gtk_window_move( GTK_WINDOW(self->priv->window), self->priv->static_x, self->priv->static_y );
   }
   else if (g_strcmp0(key, SYSTEMTRAY_KEY_STATIC_Y) == 0) {
     self->priv->static_y = g_settings_get_int(self->priv->settings, SYSTEMTRAY_KEY_STATIC_Y);
     if (self->priv->tray_is_static)
-      gtk_window_move( GTK_WINDOW(self->priv->window), self->priv->static_x - width_of_tray(self), self->priv->static_y );
+      gtk_window_move( GTK_WINDOW(self->priv->window), self->priv->static_x, self->priv->static_y );
   }
 }
 
@@ -341,6 +347,7 @@ static gboolean filter_tray_cb(NaTray* tray, NaTrayChild* icon, gpointer user_da
   IndicatorSystemtray *self = INDICATOR_SYSTEMTRAY( user_data );
   self->priv->count_tray_icon++;
   gtk_window_resize( GTK_WINDOW(self->priv->window), width_of_tray(self), 24 );
+
   if (self->priv->count_tray_icon > 0 && self->priv->hide_indicator) {
     self->priv->hide_indicator = FALSE;
     update_indicator_visibility( self );
@@ -367,7 +374,7 @@ static void update_position_tray(gpointer user_data) {
   gint w_s = gdk_screen_get_width( screen );
   if (self->priv->tray_is_static) {
     if (self->priv->static_x > w_s)
-      self->priv->static_x = self->priv->static_x - (width_of_tray(self)+self->priv->static_x - w_s);
+      self->priv->static_x = w_s;
     g_settings_set_int(self->priv->settings, SYSTEMTRAY_KEY_STATIC_X, self->priv->static_x);
     g_settings_set_int(self->priv->settings, SYSTEMTRAY_KEY_STATIC_Y, self->priv->static_y);
   }
@@ -375,10 +382,10 @@ static void update_position_tray(gpointer user_data) {
     gint x = 0;
     gint y = 0;
     mouse_get_position( &x, &y );
-    self->priv->x = x - ((width_of_tray(self))/2);
+    self->priv->x = x + (width_of_tray(self)/2);
     self->priv->y = SYSTEMTRAY_TRAY_TOP;
-    if ((width_of_tray(self) + self->priv->x) > w_s)
-      self->priv->x = self->priv->x - (width_of_tray(self)+self->priv->x - w_s);  
+    if (self->priv->x > w_s)
+      self->priv->x = w_s;  
   }
 }
 
