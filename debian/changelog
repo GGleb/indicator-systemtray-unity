@@ -1,3 +1,9 @@
+indicator-netspeed-unity (1.01-trusty1) trusty; urgency=medium
+
+  * Fixes associated with freeing memory in GSettings
+
+ -- Gleb Golovachev <golovachev.gleb@gmail.com>  Thu, 12 Feb 2015 15:15:00 +0500
+ 
 indicator-systemtray-unity (0.1-trusty0) trusty; urgency=medium
 
   * Initial release
