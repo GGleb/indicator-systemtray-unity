@@ -1,4 +1,4 @@
-CC=gcc -shared -fPIC
+CC=gcc --shared -fPIC
 CFLAGS=-g -Wall -Wfatal-errors -std=c99 $(shell pkg-config --cflags --libs gtk+-3.0 indicator3-0.4 unity-misc)
 
 all: libsystemtray.so
