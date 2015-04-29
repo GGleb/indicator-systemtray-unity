@@ -106,6 +106,7 @@ static gboolean filter_tray_cb(NaTray* tray, NaTrayChild* icon, gpointer user_da
 static void on_tray_icon_removed(NaTrayManager* manager, NaTrayChild* removed, gpointer user_data);
 static void setting_changed_cb(GSettings *settings, gchar *key, gpointer user_data);
 static void set_position_menu(GtkMenu *menu, gint *x, gint *y, gboolean *push_in, gpointer user_data);
+static gboolean show_tray(gpointer user_data);
 static gboolean hide_tray(gpointer user_data);
 static gboolean hide_menu(gpointer user_data);
 static void setting_changed_cb(GSettings *settings, gchar *key, gpointer user_data);
