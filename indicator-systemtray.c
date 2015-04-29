@@ -157,17 +157,19 @@ static void indicator_systemtray_init(IndicatorSystemtray *self) {
     self->priv->started_the_first_time = g_settings_get_boolean( self->priv->settings, SYSTEMTRAY_KEY_IS_FIRST_TIME );
     self->priv->tray_is_static = g_settings_get_boolean( self->priv->settings, SYSTEMTRAY_KEY_TRAY_IS_STATIC );
 
-    if (self->priv->started_the_first_time) {
+    self->priv->static_x = g_settings_get_int( self->priv->settings, SYSTEMTRAY_KEY_STATIC_X );
+    self->priv->static_y = g_settings_get_int( self->priv->settings, SYSTEMTRAY_KEY_STATIC_Y );
+
+    if (self->priv->started_the_first_time || (self->priv->static_x <= 0 && self->priv->static_y <= 0)) {
       GdkScreen* screen = gdk_screen_get_default();
       gint w_s = gdk_screen_get_width( screen );
       self->priv->static_x = w_s/2;
       self->priv->static_y = 0;
       g_settings_set_boolean (self->priv->settings, SYSTEMTRAY_KEY_IS_FIRST_TIME, FALSE);
+      g_settings_set_int(self->priv->settings, SYSTEMTRAY_KEY_STATIC_X, self->priv->static_x);
+      g_settings_set_int(self->priv->settings, SYSTEMTRAY_KEY_STATIC_Y, self->priv->static_y);
     }
-    else {
-      self->priv->static_x = g_settings_get_int( self->priv->settings, SYSTEMTRAY_KEY_STATIC_X );
-      self->priv->static_y = g_settings_get_int( self->priv->settings, SYSTEMTRAY_KEY_STATIC_Y );
-    }
+
     self->priv->hide_tray_is_active = FALSE;
     self->priv->hide_menu_is_active = FALSE;
     self->priv->menu = GTK_MENU( gtk_menu_new() );
@@ -375,14 +377,13 @@ static void update_position_tray(gpointer user_data) {
   if (self->priv->tray_is_static) {
     if (self->priv->static_x > w_s)
       self->priv->static_x = w_s;
+    if (self->priv->static_x <= 0)
+      self->priv->static_x = 1;
     g_settings_set_int(self->priv->settings, SYSTEMTRAY_KEY_STATIC_X, self->priv->static_x);
     g_settings_set_int(self->priv->settings, SYSTEMTRAY_KEY_STATIC_Y, self->priv->static_y);
   }
   else {
-    gint x = 0;
-    gint y = 0;
-    mouse_get_position( &x, &y );
-    self->priv->x = x + (width_of_tray(self)/2);
+    self->priv->x = self->priv->x + (width_of_tray(self)/2) + 18;
     self->priv->y = SYSTEMTRAY_TRAY_TOP;
     if (self->priv->x > w_s)
       self->priv->x = w_s;  
@@ -405,6 +406,40 @@ static void mouse_get_position(gint *x, gint *y) {
   GdkDeviceManager *device_manager = gdk_display_get_device_manager( display );
   GdkDevice *device = gdk_device_manager_get_client_pointer( device_manager );
   gdk_device_get_position( device, NULL, x, y ); 
+}
+
+static gboolean show_tray(gpointer user_data) {
+    IndicatorSystemtray *self = INDICATOR_SYSTEMTRAY(user_data);
+    gint x = 0;
+    gint y = 0;
+    mouse_get_position( &x, &y );
+    gboolean visible;
+    g_object_get( G_OBJECT(self->priv->menu), "visible", &visible, NULL );
+    if (visible) {
+      gtk_menu_reposition( GTK_MENU(self->priv->menu) );
+      GtkWidget *top_widget = gtk_widget_get_toplevel( GTK_WIDGET(self->priv->menu) );
+      GtkWindow *top_win = GTK_WINDOW( top_widget );
+      gtk_window_get_position( top_win, &self->priv->x, &self->priv->y );
+      update_position_tray( self );
+      gtk_menu_popup( GTK_MENU(self->priv->menu), NULL, NULL, (GtkMenuPositionFunc)set_position_menu, self, 0, gtk_get_current_event_time() );
+      gtk_widget_show( self->priv->window );
+      gtk_window_move( GTK_WINDOW(self->priv->window), self->priv->x, self->priv->y/*+1*/ );
+      if (y > 24) return FALSE;
+      if (!self->priv->hide_menu_is_active) {
+        self->priv->hide_menu_is_active = TRUE;
+        g_timeout_add( 100, hide_menu, self );
+      }
+      if (!self->priv->hide_tray_is_active) {
+        self->priv->hide_tray_is_active = TRUE;
+        g_timeout_add( 300, hide_tray, self );
+      }
+    } 
+    else {
+      if (y <= 24 || y > 70)
+        gtk_widget_hide( self->priv->window );
+    }
+
+  return FALSE;
 }
 
 static gboolean hide_menu(gpointer user_data) {
@@ -456,30 +491,6 @@ static void menu_visible_notify_cb(GtkWidget *menu, G_GNUC_UNUSED GParamSpec *ps
   IndicatorSystemtray *self = INDICATOR_SYSTEMTRAY( user_data );
   
   if (!self->priv->tray_is_static) {
-    gint x = 0;
-    gint y = 0;
-    mouse_get_position( &x, &y );
-    
-    gboolean visible;
-    g_object_get( G_OBJECT(menu), "visible", &visible, NULL );
-    if (visible) {
-      update_position_tray( self );
-      gtk_menu_popup( GTK_MENU(menu), NULL, NULL, (GtkMenuPositionFunc)set_position_menu, self, 0, gtk_get_current_event_time() );
-      gtk_widget_show( self->priv->window );
-      gtk_window_move( GTK_WINDOW(self->priv->window), self->priv->x, self->priv->y/*+1*/ );
-      if (y > 24) return;
-      if (!self->priv->hide_menu_is_active) {
-        self->priv->hide_menu_is_active = TRUE;
-        g_timeout_add( 100, hide_menu, self );
-      }
-      if (!self->priv->hide_tray_is_active) {
-        self->priv->hide_tray_is_active = TRUE;
-        g_timeout_add( 300, hide_tray, self );
-      }
-    } 
-    else {
-      if (y <= 24 || y > 70)
-        gtk_widget_hide( self->priv->window );
-    }
+    g_timeout_add( 10, show_tray, self );
   }
 }
