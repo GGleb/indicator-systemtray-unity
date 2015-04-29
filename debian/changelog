@@ -1,3 +1,9 @@
+indicator-systemtray-unity (0.2-trusty0) trusty; urgency=medium
+
+  * Fixed small bugs.
+
+ -- Gleb Golovachev <golovachev.gleb@gmail.com>  Thu, 30 Apr 2015 00:01:02 +0500
+ 
 indicator-systemtray-unity (0.1-trusty1) trusty; urgency=medium
 
   * Fix for fullscreen
