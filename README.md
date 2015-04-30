@@ -40,7 +40,7 @@ Settings
 -----
 
 To change the mode position: press the middle mouse button on the indicator.
-The horizontal position can be changed: scrolling over the indicator.
+The horizontal position can be changed: scrolling the mouse over the indicator.
 
 Settings can be changed in gsettings:/net/launchpad/indicator/systemtray (use dconf-editor).
 
