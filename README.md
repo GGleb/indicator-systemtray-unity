@@ -12,19 +12,21 @@ git clone https://github.com/GGleb/indicator-systemtray-unity.git
 cd indicator-systemtray-unity
 make
 sudo make install
-
-re-login
 ```
+re-login
+
 
 Deb
 -----
 
 ```
 sudo apt-get install fakeroot dpkg-dev
-delete line (	glib-compile-schemas $(DESTDIR)/usr/share/glib-2.0/schemas/ ) in Makefile
-dpkg-buildpackage -rfakeroot -b
-
 ```
+delete line (	glib-compile-schemas $(DESTDIR)/usr/share/glib-2.0/schemas/ ) in Makefile
+```
+dpkg-buildpackage -rfakeroot -b
+```
+
 
 PPA
 -----
@@ -34,6 +36,10 @@ sudo apt-add-repository ppa:fixnix/indicator-systemtray-unity
 sudo apt-get update
 sudo apt-get install indicator-systemtray-unity
 
+```
+To remove this package (with its configuration files!!!):
+```
+sudo apt-get --purge remove indicator-systemtray-unity
 ```
 
 Settings
