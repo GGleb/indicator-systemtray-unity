@@ -7,7 +7,7 @@ Usage
 -----
 
 ```
-sudo apt-get install build-essential libunity-misc-dev libgtk-3-dev libindicator3-dev git-core
+sudo apt-get install build-essential libgtk-3-dev libindicator3-dev git-core
 git clone https://github.com/GGleb/indicator-systemtray-unity.git
 cd indicator-systemtray-unity
 make
