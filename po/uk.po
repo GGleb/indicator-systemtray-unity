@@ -1,0 +1,52 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: indicator-systemtray-unity 0.2.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2015-06-03 11:42+0500\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+#: indicator-systemtray.c:223
+msgid "Settings"
+msgstr "Параметри"
+
+#: indicator-systemtray.c:228
+msgid "Background"
+msgstr "Фон"
+
+#: indicator-systemtray.c:233
+msgid "Static"
+msgstr "Статичний"
+
+#: indicator-systemtray.c:238 indicator-systemtray.c:257
+#: indicator-systemtray.c:407 indicator-systemtray.c:432
+msgid "Color"
+msgstr "Колір"
+
+#: indicator-systemtray.c:241 indicator-systemtray.c:260
+#: indicator-systemtray.c:416 indicator-systemtray.c:441
+msgid "Stroke"
+msgstr "Обведення"
+
+#: indicator-systemtray.c:244 indicator-systemtray.c:263
+msgid "Show"
+msgstr "Показати"
+
+#: indicator-systemtray.c:248 indicator-systemtray.c:267
+msgid "Reset"
+msgstr "Скидання"
+
+#: indicator-systemtray.c:252
+msgid "Floating"
+msgstr "Плаваючий"

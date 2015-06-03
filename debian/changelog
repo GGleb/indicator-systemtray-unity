@@ -1,3 +1,10 @@
+indicator-systemtray-unity (0.2.1-trusty0) trusty; urgency=medium
+
+  * Added background settings.
+  * Small changes in the library "unity-misc".
+
+ -- Gleb Golovachev <golovachev.gleb@gmail.com>  Wed, 03 Jun 2015 03:03:03 +0500
+
 indicator-systemtray-unity (0.2-trusty0) trusty; urgency=medium
 
   * Fixed small bugs.

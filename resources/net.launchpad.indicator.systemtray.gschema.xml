@@ -26,5 +26,35 @@
       <summary>Position Y</summary>
       <description>Position Y when in mode "show always".</description>
     </key>
+    <key type="b" name="show-background-static">
+      <default>true</default>
+      <summary>Show the background for static Systemtray</summary>
+      <description>To display a background value must be TRUE.</description>
+    </key>
+    <key type="s" name="rgba-static">
+      <default>'rgba(153,153,153,200)'</default>
+      <summary>Static. Color</summary>
+      <description>The color of the Systemtray background. (0 - 255,...)</description>
+    </key>
+    <key type="s" name="rgba-static-stroke">
+      <default>'#000000'</default>
+      <summary>Static. Stroke. Color</summary>
+      <description>The color of the Systemtray background. (0 - 255,...)</description>
+    </key>
+    <key type="b" name="show-background-floating">
+      <default>true</default>
+      <summary>Show the background for floating Systemtray</summary>
+      <description>To display a background value must be TRUE.</description>
+    </key>
+    <key type="s" name="rgba-floating">
+      <default>'rgba(153,153,153,200)'</default>
+      <summary>Static. Color</summary>
+      <description>The color of the Systemtray background. (0 - 255,...)</description>
+    </key>
+    <key type="s" name="rgba-floating-stroke">
+      <default>'#000000'</default>
+      <summary>Static. Stroke. Color</summary>
+      <description>The color of the Systemtray background. (0 - 255,...)</description>
+    </key>
   </schema>
 </schemalist>

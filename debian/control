@@ -4,8 +4,7 @@ Priority: extra
 Maintainer: Gleb Golovachev <golovachev.gleb@gmail.com>
 Build-Depends: debhelper (>= 7),
 	libgtk-3-dev,
-	libindicator3-dev,
-	libunity-misc-dev
+	libindicator3-dev
 Standards-Version: 3.9.5
 Homepage: https://launchpad.net/~fixnix/+archive/ubuntu/indicator-systemtray-unity
 
