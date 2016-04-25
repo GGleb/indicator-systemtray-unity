@@ -220,6 +220,7 @@ static void indicator_systemtray_init(IndicatorSystemtray *self) {
     self->priv->hide_menu_is_active = FALSE;
 
     self->priv->menu = GTK_MENU( gtk_menu_new() );
+    gtk_widget_set_size_request( GTK_WIDGET(self->priv->menu), 0, 0 );
     self->priv->settings_item = gtk_menu_item_new_with_label( _("Settings") );
     gtk_menu_shell_append( GTK_MENU_SHELL(self->priv->menu), self->priv->settings_item );
     GtkWidget *settings_sub = gtk_menu_new();
