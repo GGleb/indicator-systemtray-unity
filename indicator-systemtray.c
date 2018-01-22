@@ -189,7 +189,7 @@ static void indicator_systemtray_init(IndicatorSystemtray *self) {
   self->priv->disable_indicator = g_settings_get_boolean( self->priv->settings, SYSTEMTRAY_KEY_DISABLE_INDICATOR );
   g_signal_connect( self->priv->settings, "changed", G_CALLBACK(setting_changed_cb), self );
 
-  if (g_strcmp0(g_getenv("DESKTOP_SESSION"),"ubuntu") != 0 || self->priv->disable_indicator) {
+  if (g_strrstr(g_getenv("XDG_CURRENT_DESKTOP"),"Unity") == NULL || self->priv->disable_indicator) {
     self->priv->disable_indicator = TRUE;
   }
   else {
